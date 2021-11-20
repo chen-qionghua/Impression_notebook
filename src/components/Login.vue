@@ -30,6 +30,13 @@
   </div>
 </template>
 <script>
+import Auth from '../apis/auth'
+
+Auth.getInfo()//更加语义化且重构后接口调用时不需要关心url
+  .then(data => {
+    console.log(data)
+  })
+
 export default {
   name: 'Login',
   data() {
@@ -78,6 +85,12 @@ export default {
       this.register.notice = ''
       console.log('用户名和密码正确')
       console.log('开始注册，用户名是:', this.register.username, '密码是:', this.register.password)
+      Auth.register({
+        username:this.register.username,
+        password:this.register.password})
+          .then(data => {
+        console.log(data)
+      })
     },
     onLogin() {
       let result1 = this.validUsername(this.login.username)
@@ -98,6 +111,10 @@ export default {
       this.login.notice = ''
       console.log('用户名和密码正确')
       console.log('开始注册，用户名是:', this.login.username, '密码是:', this.login.password)
+      Auth.login({username:this.login.username,password:this.login.password})
+          .then(data => {
+          console.log(data)
+        })
     },
 
     validUsername(username) {
