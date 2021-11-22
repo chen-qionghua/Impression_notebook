@@ -1,5 +1,7 @@
+//引入axios；封装统一接口，无论get还是post调用；有一个统一的入口对请求进行管理
 import axios from 'axios'
 import baseURLConfig from './config-baseURL'
+//自定义配置通用的请求信息
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.baseURL = baseURLConfig.baseURL
 

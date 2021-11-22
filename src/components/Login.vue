@@ -32,10 +32,10 @@
 <script>
 import Auth from '../apis/auth'
 
-Auth.getInfo()//更加语义化且重构后接口调用时不需要关心url
-  .then(data => {
-    console.log(data)
-  })
+// Auth.getInfo()//更加语义化且重构后接口调用时不需要关心url
+//   .then(data => {
+//     console.log(data)
+//   })
 
 export default {
   name: 'Login',
@@ -81,15 +81,18 @@ export default {
         console.log('密码错误')
         return
       }
-      this.register.isError = false
-      this.register.notice = ''
-      console.log('用户名和密码正确')
-      console.log('开始注册，用户名是:', this.register.username, '密码是:', this.register.password)
+
       Auth.register({
-        username:this.register.username,
-        password:this.register.password})
-          .then(data => {
-        console.log(data)
+        username: this.register.username,
+        password: this.register.password
+      })
+        .then(data => {
+          this.register.isError = false
+          this.register.notice = ''
+          this.$router.push({path:'notebooks'})
+        }).catch(data => {
+        this.register.isError = true
+        this.register.notice = data.msg
       })
     },
     onLogin() {
@@ -107,14 +110,15 @@ export default {
         console.log('密码错误')
         return
       }
-      this.login.isError = false
-      this.login.notice = ''
-      console.log('用户名和密码正确')
-      console.log('开始注册，用户名是:', this.login.username, '密码是:', this.login.password)
-      Auth.login({username:this.login.username,password:this.login.password})
-          .then(data => {
-          console.log(data)
-        })
+      Auth.login({username: this.login.username, password: this.login.password})
+        .then(data => {
+          this.login.isError = false
+          this.login.notice = ''
+          this.$router.push({path: 'notebooks'})
+        }).catch(data => {
+        this.login.isError = true  //注意：箭头函数的this和外面函数的this保持一致
+        this.login.notice = data.msg
+      })
     },
 
     validUsername(username) {
@@ -205,6 +209,7 @@ export default {
       height: 0;
       overflow: hidden;
       transition: height .4s;
+
       &.show {
         height: 193px;
       }
