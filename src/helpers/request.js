@@ -1,6 +1,8 @@
 //引入axios；封装统一接口，无论get还是post调用；有一个统一的入口对请求进行管理
 import axios from 'axios'
 import baseURLConfig from './config-baseURL'
+import {Message} from 'element-ui'
+
 //自定义配置通用的请求信息
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.baseURL = baseURLConfig.baseURL
@@ -25,11 +27,17 @@ export default function request(url,type = 'GET', data = {}) {
       if(res.status ===200) {
         resolve(res.data)
       }else {
-        console.error(res.data)
+        Message({
+          type:'error',
+          message:res.data.msg
+        })
         reject(res.data)
       }
     }).catch(err => {
-      console.error({msg:'网络异常'})
+      Message({
+        type:'error',
+        message:'网络异常'
+      })
       reject({msg:'网络异常'})
     })
   })

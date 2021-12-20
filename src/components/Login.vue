@@ -31,6 +31,7 @@
 </template>
 <script>
 import Auth from '../apis/auth'
+import Bus from '../helpers/bus'
 
 // Auth.getInfo()//更加语义化且重构后接口调用时不需要关心url
 //   .then(data => {
@@ -89,6 +90,7 @@ export default {
         .then(data => {
           this.register.isError = false
           this.register.notice = ''
+          Bus.$emit('userinfo',{username:this.register.username})
           this.$router.push({path:'notebooks'})
         }).catch(data => {
         this.register.isError = true
@@ -114,6 +116,7 @@ export default {
         .then(data => {
           this.login.isError = false
           this.login.notice = ''
+          Bus.$emit('userinfo',{username:this.login.username})
           this.$router.push({path: 'notebooks'})
         }).catch(data => {
         this.login.isError = true  //注意：箭头函数的this和外面函数的this保持一致
