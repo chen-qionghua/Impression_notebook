@@ -10,7 +10,7 @@
 import Sidebar from './components/Sidebar.vue'
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {Sidebar}
 }
 </script>

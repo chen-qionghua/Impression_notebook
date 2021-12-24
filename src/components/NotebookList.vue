@@ -7,7 +7,7 @@
       <div class="layout">
         <h3>笔记本列表({{notebooks.length}})</h3>
         <div class="book-list">
-          <router-link v-for="notebook in notebooks" :to="`/note?notebookId=${notebook.id}`" class="notebook">
+          <router-link v-for="notebook in notebooks" to="/note/1" class="notebook">
             <div>
               <span class="iconfont icon-notebook"></span> {{notebook.title}}
               <span>{{notebook.noteCounts}}</span>
@@ -27,15 +27,14 @@
 import Auth from '../apis/auth'
 import Notebooks from '../apis/notebooks'
 import {friendlyDate} from '../helpers/util'
+import {mapState,mapActions,mapGetters} from 'vuex'
 
 // window.Notebooks = Notebooks
 // 设置全局变量以供浏览器调试
 
 export default {
   data () {
-    return {
-      notebooks: []
-    }
+    return {}
   },
 
   created() {
@@ -46,13 +45,25 @@ export default {
         }
       })
 
-    Notebooks.getAll()
-      .then(res => {
-        this.notebooks = res.data
-      })
+  //   Notebooks.getAll()
+  //     .then(res => {
+  //       this.notebooks = res.data
+  //     })
+    this.$store.dispatch('getNotebooks')
   },
 
+  computed: {
+    ...mapGetters(['notebooks'])
+  },
+
+
   methods: {
+    ...mapActions([
+      'getNotebooks',
+      'addNotebook',
+      'updateNotebook',
+      'deleteNotebook'
+    ]),
     onCreate() {
       this.$prompt('请输入新笔记本标题', '创建笔记本', {
         confirmButtonText: '确定',
@@ -60,15 +71,7 @@ export default {
         inputPattern: /^.{1,30}$/,
         inputErrorMessage: '标题不能为空，且不超过30个字符'
       }).then(({ value }) => {
-        return Notebooks.addNotebook({title:value})
-        })
-        .then((res) => {
-          res.data.friendlyCreatedAt = friendlyDate(res.data.createdAt)
-          this.notebooks.unshift(res.data)
-          this.$message({
-            type: 'success',
-            message: res.msg
-          })
+         this.addNotebook({title:value})
         })
     },
 
@@ -82,16 +85,8 @@ export default {
         inputValue:notebook.title
       }).then(({ value }) => {
         title = value
-        return Notebooks.updateNotebook(notebook.id,{title})
+         this.updateNotebook({notebookId:notebook.id, title:value})
       })
-        .then((res) => {
-          notebook.title = title
-          this.$message({
-            type: 'success',
-            message: res.msg
-          })
-        })
-
     },
 
     onDelete(notebook) {
@@ -99,17 +94,9 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
+      }).then(() => {
+        this.deleteNotebook(notebook.id)
       })
-        .then(() => {
-        return Notebooks.deleteNotebook(notebook.id)
-      })
-        .then((res) => {
-          this.notebooks.splice(this.notebooks.indexOf(notebook),1)
-          this.$message({
-            type:'success',
-            message:res.msg
-          })
-        })
     }
   }
 }
