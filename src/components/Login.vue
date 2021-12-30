@@ -30,8 +30,7 @@
   </div>
 </template>
 <script>
-import Auth from '../apis/auth'
-import Bus from '../helpers/bus'
+import {mapActions,mapMutations,mapState} from 'vuex'
 
 // Auth.getInfo()//更加语义化且重构后接口调用时不需要关心url
 //   .then(data => {
@@ -59,6 +58,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      'loginUser':'login',
+      'registerUser':'register'
+    }),
     showRegister() {
       this.isShowRegister = true
       this.isShowLogin = false
@@ -83,14 +86,13 @@ export default {
         return
       }
 
-      Auth.register({
+      this.registerUser({
         username: this.register.username,
         password: this.register.password
       })
-        .then(data => {
+        .then(() => {
           this.register.isError = false
           this.register.notice = ''
-          Bus.$emit('userinfo',{username:this.register.username})
           this.$router.push({path:'notebooks'})
         }).catch(data => {
         this.register.isError = true
@@ -112,11 +114,10 @@ export default {
         console.log('密码错误')
         return
       }
-      Auth.login({username: this.login.username, password: this.login.password})
-        .then(data => {
+      this.loginUser({username: this.login.username, password: this.login.password})
+        .then(() => {
           this.login.isError = false
           this.login.notice = ''
-          Bus.$emit('userinfo',{username:this.login.username})
           this.$router.push({path: 'notebooks'})
         }).catch(data => {
         this.login.isError = true  //注意：箭头函数的this和外面函数的this保持一致

@@ -36,6 +36,7 @@ export default {
         .then(res => {
           res.data.createdAtFriendly = friendlyDate(res.data.createdAt)
           res.data.updatedAtFriendly = friendlyDate(res.data.updatedAt)
+          resolve(res)
         }).catch(err => {
           reject(err)
       })
