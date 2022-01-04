@@ -142,6 +142,8 @@ export default {
         margin-left:10px;
         padding:2px 4px;
         font-size:12px;
+        cursor: pointer;
+
       }
     }
   }

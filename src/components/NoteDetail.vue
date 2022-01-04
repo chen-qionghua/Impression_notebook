@@ -9,15 +9,14 @@
           <span>更新日期:{{curNote.updatedAtFriendly}}</span>
           <span>{{statusText}}</span>
           <span class="iconfont icon-delete" @click="onDeleteNote"></span>
-          <span class="iconfont el-icon-view"  @click="isShowPreview=!isShowPreview"></span>
+          <span class="iconfont" :class="isShowPreview?'icon-edit':'icon-eye'" @click="isShowPreview=!isShowPreview"></span>
         </div>
         <div class="note-title">
           <input type="text" v-model:vaule="curNote.title"
                 @input="onUpdateNote" @keydown="statusText='正在编辑中...'" placeholder="请输入标题">
         </div>
         <div class="editor">
-          <textarea v-show="!isShowPreview" v-model:value="curNote.content"
-                   @input="onUpdateNote" @keydown="statusText='正在编辑中...'" placeholder="输入内容，支持 markdown 语法"></textarea>
+          <codemirror  v-model="curNote.content" :options="cmOptions" v-show="!isShowPreview" @input="onUpdateNote" @inputRead="statusText='正在输入...'"></codemirror>
           <div class="preview markdown-body" v-html="previewContent" v-show="isShowPreview"></div>
         </div>
       </div>
@@ -31,18 +30,30 @@
 
 import NoteSidebar from './NoteSidebar'
 import _ from 'lodash'
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/markdown/markdown.js'
+import 'codemirror/theme/neat.css'
 import MarkdownIt from 'markdown-it'
 import {mapGetters,mapActions,mapMutations} from 'vuex'
 
 let md = new MarkdownIt()
 
 export default {
-  components: {NoteSidebar},
+  components: {NoteSidebar,codemirror},
   name: 'NoteDetail',
   data() {
     return {
       statusText:'笔记未改动',
-      isShowPreview:false
+      isShowPreview:false,
+      cmOptions:{
+        tabSize:4,
+        mode:'text/c-markdown',
+        theme:'neat',
+        lineNumber:false,
+        line:true,
+        // more codemirror options, 更多 codemirror 的高级配置...
+      }
     }
   },
   created() {
@@ -79,7 +90,7 @@ export default {
         this.statusText ='保存出错'
       })
 
-    },300),
+    },3000),
 
     onDeleteNote() {
       this.deleteNote({noteId:this.curNote.id})
@@ -104,6 +115,8 @@ export default {
   align-items: stretch;
   background-color: #fff;
   flex: 1;
+  overflow: hidden;
+
 }
 
 </style>

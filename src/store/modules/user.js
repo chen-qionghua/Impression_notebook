@@ -35,10 +35,11 @@
         })
     },
 
-    logout({commit}) {
+    logout({commit},payload) {
       return Auth.logout()
         .then(res => {
           commit('setUser',{user:null})
+          router.push(payload)
         })
     },
 

@@ -23,10 +23,17 @@ export default {
   margin: 0px;
   padding: 0px;
 }
-
-html, body, #app {
-  height: 100vh;
+*::after,*::before {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
 }
+body { overflow:scroll;overflow-y:hidden; }
+#app {
+  height: 100vh;
+  overflow:hidden;
+}
+
 
 body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
