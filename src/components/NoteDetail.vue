@@ -9,7 +9,7 @@
           <span>更新日期:{{curNote.updatedAtFriendly}}</span>
           <span>{{statusText}}</span>
           <span class="iconfont icon-delete" @click="onDeleteNote"></span>
-          <span class="iconfont icon-fullscreen" @click="isShowPreview=!isShowPreview"></span>
+          <span class="iconfont el-icon-view"  @click="isShowPreview=!isShowPreview"></span>
         </div>
         <div class="note-title">
           <input type="text" v-model:vaule="curNote.title"
@@ -53,7 +53,8 @@ export default {
   computed: {
     ...mapGetters([
       'notes',
-      'curNote'
+      'curNote',
+      'curBook'
     ]),
     previewContent() {
       return md.render(this.curNote.content || '')
@@ -81,7 +82,7 @@ export default {
     },300),
 
     onDeleteNote() {
-      this.deleteNote({noteId:this.curNote})
+      this.deleteNote({noteId:this.curNote.id})
       .then(data => {
         this.$router.replace({path:'/note'})
       })
