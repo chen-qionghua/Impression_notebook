@@ -83,7 +83,7 @@ export default {
     ]),
     onUpdateNote:_.debounce(function() {
       if(!this.curNote.id) return
-      this.updateNote({noteId:this.curNote.id, title:this.curNote.title,content:this.curNote.content})
+      this.updateNote({noteId:this.curNote.id, title:this.curNote.title||'',content:this.curNote.content})
       .then(data => {
         this.statusText = '已保存'
       }).catch(data => {
@@ -116,7 +116,8 @@ export default {
   background-color: #fff;
   flex: 1;
   overflow: hidden;
-
 }
-
+.CodeMirror.cm-s-neat {
+  padding: 20px;
+}
 </style>

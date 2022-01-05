@@ -9,7 +9,7 @@
             <transition name="slide">
               <div :class="{show:isShowRegister}" class="register">
                 <input type="text" v-model="register.username" placeholder="用户名">
-                <input type="password" v-model="register.password" placeholder="密码">
+                <input type="password" v-model="register.password" @keyup.enter="onRegister" placeholder="密码">
                 <p :class="{error:register.isError}">{{ register.notice }}</p>
                 <div class="button" @click="onRegister">创建账号</div>
               </div>
@@ -18,7 +18,7 @@
             <transition name="slide">
               <div :class="{show:isShowLogin}" class="login">
                 <input type="text" v-model="login.username" placeholder="输入用户名">
-                <input type="password" v-model="login.password" placeholder="密码">
+                <input type="password" v-model="login.password" @keyup.enter="onLogin" placeholder="密码">
                 <p :class="{error:login.isError}">{{ login.notice }}</p>
                 <div class="button" @click="onLogin"> 登录</div>
               </div>
@@ -59,38 +59,33 @@ export default {
   },
   methods: {
     ...mapActions({
-      'loginUser':'login',
-      'registerUser':'register'
+      loginUser:'login',
+      registerUser:'register'
     }),
     showRegister() {
-      this.isShowRegister = true
       this.isShowLogin = false
+      this.isShowRegister = true
     },
     showLogin() {
       this.isShowLogin = true
       this.isShowRegister = false
     },
     onRegister() {
-      let result1 = this.validUsername(this.register.username)
-      if (!result1.isValid) {
+      if(!/^[\w\u4e00-\u9fa5]{3,15}$/.test(this.register.username)){
         this.register.isError = true
-        this.register.notice = result1.notice
-        console.log('用户名错误')
+        this.register.notice = '用户名3~15个字符，仅限于字母数字下划线中文'
         return
       }
-      let result2 = this.validPassword(this.register.password)
-      if (!result2.isValid) {
+      if(!/^.{6,16}$/.test(this.register.password)){
         this.register.isError = true
-        this.register.notice = result2.notice  //对象才可以用点语法获取对象中的属性；notice为回调
-        console.log('密码错误')
+        this.register.notice = '密码长度为6~16个字符'
         return
       }
 
       this.registerUser({
         username: this.register.username,
         password: this.register.password
-      })
-        .then(() => {
+      }).then(() => {
           this.register.isError = false
           this.register.notice = ''
           this.$router.push({path:'notebooks'})
@@ -100,20 +95,17 @@ export default {
       })
     },
     onLogin() {
-      let result1 = this.validUsername(this.login.username)
-      if (!result1.isValid) {
+      if(!/^[\w\u4e00-\u9fa5]{3,15}$/.test(this.login.username)){
         this.login.isError = true
-        this.login.notice = result1.notice
-        console.log('用户名错误')
+        this.login.notice = '用户名3~15个字符，仅限于字母数字下划线中文'
         return
       }
-      let result2 = this.validPassword(this.login.password)
-      if (!result2.isValid) {
+      if(!/^.{6,16}$/.test(this.login.password)){
         this.login.isError = true
-        this.login.notice = result2.notice  //对象才可以用点语法获取对象中的属性；notice为回调
-        console.log('密码错误')
+        this.login.notice = '密码长度为6~16个字符'
         return
       }
+
       this.loginUser({username: this.login.username, password: this.login.password})
         .then(() => {
           this.login.isError = false
@@ -125,18 +117,7 @@ export default {
       })
     },
 
-    validUsername(username) {
-      return {
-        isValid: /^[a-zA-Z_0-9\u4e00-\u9fa5]{3,15}$/.test(username),
-        notice: '用户名必须是3~15个字符，限于字母数字下划线中文'
-      }
-    },
-    validPassword(password) {
-      return {
-        isValid: /^.{6,16}$/.test(password),
-        notice: '密码长度为6~16个字符'
-      }
-    }
+
   }
 }
 </script>
