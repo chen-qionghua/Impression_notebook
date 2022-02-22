@@ -8,15 +8,21 @@
     right: 5px;
     top: 12px;
     color: #666;
+    background-color:#ffffff;
     font-size: 12px;
     padding: 2px 4px;
-    box-shadow: 0px 0px 2px 0px #ccc;
     border: none;
     z-index: 1;
     cursor: pointer;
+    border-radius: 4spx;
+  }
+  .add-note:hover {
+    background-color: #f7fafd;
 
   }
-
+  .iconfont  {
+    font-size: 12px;
+  }
   .notebook-title{
     font-size: 18px;
     font-weight: normal;
@@ -28,6 +34,8 @@
     background-color: #f7f7f7;
     display: block;
     margin-top: 0px;
+    margin-bottom:0px;
+    cursor: default;
   }
   .el-dropdown-link{
     cursor: pointer;
@@ -38,6 +46,7 @@
 
   .menu {
     display: flex;
+    cursor: default;
 
     div {
       font-size: 12px;
@@ -72,6 +81,8 @@
         padding: 3px 0;
         font-size: 12px;
         border: 2px solid transparent;
+        text-decoration: none;
+
       }
 
       .router-link-exact-active {

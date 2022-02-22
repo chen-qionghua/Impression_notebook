@@ -29,7 +29,7 @@
     },
 
     register({commit},{username,password}) {
-      return Auth.login({username,password})
+      return Auth.register({username,password})
         .then(res => {
           commit('setUser',{user:res.data})
         })

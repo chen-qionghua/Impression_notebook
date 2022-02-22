@@ -137,6 +137,7 @@ export default {
     flex: 1;
 
     .note-bar {
+      cursor: default;
       .action {
         float:right;
         margin-left:10px;
